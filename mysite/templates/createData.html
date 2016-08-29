@@ -1,0 +1,324 @@
+{% extends "base.html" %}
+
+{% block css%}
+    {% load staticfiles %}
+    <link rel="StyleSheet" media="all" type="text/css" href="{% static 'css/styleCreate.css' %}" />
+
+{% endblock %}
+
+{% block title %}
+             <h1>Gestión de información: {{database_name}}</h1>
+{% endblock %}
+
+{% block content%}
+
+{% if exception %}
+
+<form action="{% url 'seleccionarAccion' database_name %}" method="POST"  id="seleccion" class="task-form">{% csrf_token %}
+  <label> Selecciona el método para agregar información</label>
+<select name='accion' onchange='this.form.submit()'>
+  <option id='accion'> Selecciona una acción </option>
+  <option id='accion'>Manual</option>
+  <option id='accion'>Cargar archivo CSV</option>
+</select>
+<noscript><input type="submit" value="Submit"></noscript>
+</form>
+
+{% if datos %}
+<form action="{% url 'modifyData2' database_name Id %}" method="POST"  id="data" class="task-form"> {% csrf_token %}
+  <table id="Tabla_data">
+        <tr>
+          {% for atributo in atributos %}
+            <th>{{ atributo.0 }}</th>
+          {% endfor %}
+        </tr>
+        <tr>
+          {% for atributo in atributos %}
+            <td > {% for data in datos %} <input type="text" value={{data.0}} name="data" /> {% endfor %} </td>
+          {% endfor %}
+        </tr>
+    </table>
+</form>
+
+{% else %}
+{% if csv %}
+
+<form action="{% url 'getCSVData' database_name %}" method="POST"  id="data" class="task-form" enctype="multipart/form-data"> {% csrf_token %}
+{{ form.csvArchive }} <br /> <br/>
+</form>
+
+
+<script>
+
+$(document).ready(function () {
+
+  toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-full-width",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+    }
+toastr["error"]("Por favor ingresa todos los datos", "Campos faltantes");
+$('input[type=file]').change(function () {
+  var val = $(this).val().toLowerCase();
+  var regex = new RegExp("(.*?)\.(csv)$");
+  if(!(regex.test(val))) {
+    $(this).val('');
+    toastr["error"]("Por favor selecciona un archivo con extensión .CSV ", "Error en el tipo de archivo");
+    event.preventDefault();
+    return false;
+  }
+  if(val == ""){
+    toastr["error"]("Por favor selecciona un archivo con extensión .CSV ", "Error en el tipo de archivo");
+    event.preventDefault();
+    return false;
+  }
+});
+});
+
+
+
+</script>
+
+
+{%  else %}
+<form action="{% url 'createData2' database_name %}" method="POST"  id="data" class="task-form"> {% csrf_token %}
+  <table id="Tabla_data">
+        <tr>
+          {% for atributo in atributos %}
+            <th>{{ atributo.0 }}</th>
+          {% endfor %}
+        </tr>
+        <tr>
+          {% for atributo in atributos %}
+            <td >{{ form.data }}</td>
+          {% endfor %}
+        </tr>
+    </table>
+</form>
+{% endif %}
+
+
+ {% endif %}
+
+ <script type="text/javascript">
+
+ $(document).ready(function() {
+   toastr.options = {
+     "closeButton": false,
+     "debug": false,
+     "newestOnTop": false,
+     "progressBar": false,
+     "positionClass": "toast-top-full-width",
+     "preventDuplicates": false,
+     "onclick": null,
+     "showDuration": "300",
+     "hideDuration": "1000",
+     "timeOut": "5000",
+     "extendedTimeOut": "1000",
+     "showEasing": "swing",
+     "hideEasing": "linear",
+     "showMethod": "fadeIn",
+     "hideMethod": "fadeOut"
+     }
+     toastr["error"]("Por favor ingresa todos los datos", "Campos faltantes");
+   $('form').submit(function() {
+       validateForm();
+   });
+
+   function validateForm(){
+     var name = $('#id_data').val();
+     var re = /^[a-zA-Z]*[0-9a-zA-Z]*$/;
+     if (name == ''){
+       toastr["error"]("Por favor ingresa todos los datos", "Campos faltantes");
+       event.preventDefault();
+       return false;
+     }
+
+     if(name.match(re))
+     {
+       toastr["info"]("La reación del proyecto ha sido exitosa", "Proyecto exitoso");
+       return false;
+     }
+     else{
+       toastr["error"]("El nombre del proyecto solo puede empezar con una letra y continuar con caracteres alfanumericos", "Error en Nombre del Proyecto");
+       event.preventDefault();
+       return false;
+     }
+   }
+ });
+ </script>
+
+
+<!--     lalsjfnirugnjdfnejrbfkdjeghlrbgfjgb -->
+
+{% else %}
+
+
+<form action="{% url 'seleccionarAccion' database_name %}" method="POST"  id="seleccion" class="task-form">{% csrf_token %}
+  <label> Selecciona el método para agregar información</label>
+<select name='accion' onchange='this.form.submit()'>
+  <option id='accion'> Selecciona una acción </option>
+  <option id='accion'>Manual</option>
+  <option id='accion'>Cargar archivo CSV</option>
+</select>
+<noscript><input type="submit" value="Submit"></noscript>
+</form>
+
+{% if datos %}
+<form action="{% url 'modifyData2' database_name Id %}" method="POST"  id="data" class="task-form"> {% csrf_token %}
+  <table id="Tabla_data">
+        <tr>
+          {% for atributo in atributos %}
+            <th>{{ atributo.0 }}</th>
+          {% endfor %}
+        </tr>
+        <tr>
+          {% for atributo in atributos %}
+            <td > {% for data in datos %} <input type="text" value={{data.0}} name="data" /> {% endfor %} </td>
+          {% endfor %}
+        </tr>
+    </table>
+</form>
+
+{% else %}
+{% if csv %}
+
+<form action="{% url 'getCSVData' database_name %}" method="POST"  id="data" class="task-form" enctype="multipart/form-data"> {% csrf_token %}
+{{ form.csvArchive }} <br /> <br/>
+</form>
+
+
+<script>
+
+$(document).ready(function () {
+
+  toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-full-width",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+    }
+
+$('input[type=file]').change(function () {
+  var val = $(this).val().toLowerCase();
+  var regex = new RegExp("(.*?)\.(csv)$");
+  if(!(regex.test(val))) {
+    $(this).val('');
+    toastr["error"]("Por favor selecciona un archivo con extensión .CSV ", "Error en el tipo de archivo");
+    event.preventDefault();
+    return false;
+  }
+  if(val == ""){
+    toastr["error"]("Por favor selecciona un archivo con extensión .CSV ", "Error en el tipo de archivo");
+    event.preventDefault();
+    return false;
+  }
+});
+});
+
+
+
+</script>
+
+
+{%  else %}
+<form action="{% url 'createData2' database_name %}" method="POST"  id="data" class="task-form"> {% csrf_token %}
+  <table id="Tabla_data">
+        <tr>
+          {% for atributo in atributos %}
+            <th>{{ atributo.0 }}</th>
+          {% endfor %}
+        </tr>
+        <tr>
+          {% for atributo in atributos %}
+            <td >{{ form.data }}</td>
+          {% endfor %}
+        </tr>
+    </table>
+</form>
+{% endif %}
+
+
+ {% endif %}
+
+ <script type="text/javascript">
+
+ $(document).ready(function() {
+   toastr.options = {
+     "closeButton": false,
+     "debug": false,
+     "newestOnTop": false,
+     "progressBar": false,
+     "positionClass": "toast-top-full-width",
+     "preventDuplicates": false,
+     "onclick": null,
+     "showDuration": "300",
+     "hideDuration": "1000",
+     "timeOut": "5000",
+     "extendedTimeOut": "1000",
+     "showEasing": "swing",
+     "hideEasing": "linear",
+     "showMethod": "fadeIn",
+     "hideMethod": "fadeOut"
+     }
+   $('form').submit(function() {
+       validateForm();
+   });
+
+   function validateForm(){
+     var name = $('#id_data').val();
+     var re = /^[a-zA-Z]*[0-9a-zA-Z]*$/;
+     if (name == ''){
+       toastr["error"]("Por favor ingresa todos los datos", "Campos faltantes");
+       event.preventDefault();
+       return false;
+     }
+
+     if(name.match(re))
+     {
+       toastr["info"]("La reación del proyecto ha sido exitosa", "Proyecto exitoso");
+       return false;
+     }
+     else{
+       toastr["error"]("El nombre del proyecto solo puede empezar con una letra y continuar con caracteres alfanumericos", "Error en Nombre del Proyecto");
+       event.preventDefault();
+       return false;
+     }
+   }
+ });
+ </script>
+
+
+
+
+
+{% endif %}
+  {% endblock %}
+
+  {% block boton %}
+  <button type="submit" form="data" value="Submit" class="btn" name="guardar">Guardar</button>
+  <a href="{% url 'showData3' database_name %}" > <button class="btn"> Cancelar </button> </a>
+  {% endblock %}

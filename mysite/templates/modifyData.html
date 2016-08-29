@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block css%}
+    {% load staticfiles %}
+    <link rel="StyleSheet" media="all" type="text/css" href="{% static 'css/styleCreate.css' %}" />
+{% endblock %}
+
+{% block title %}
+             <h1>Gestión de información: {{database_name}}</h1>
+{% endblock %}
+
+{% block content%}
+
+{% if datos %}
+
+<form action="{% url 'modifyData2' database_name Id %}" method="POST"  id="data" class="task-form"> {% csrf_token %}
+  <table id="Tabla_data">
+        <tr>
+          {% for atributo in atributos %}
+            <th>{{ atributo.0 }}</th>
+          {% endfor %}
+        </tr>
+
+        <tr>
+          {% for atributo in atributos %}
+            <td > {% for da in datos %}
+              <input type="text" value={{da.0}} name="data" />
+              {% endfor %}
+            </td>
+            {% endfor %}
+        </tr>
+
+    </table>
+</form>
+ {% endif %}
+
+ <script type="text/javascript">
+
+ $(document).ready(function() {
+   toastr.options = {
+     "closeButton": false,
+     "debug": false,
+     "newestOnTop": false,
+     "progressBar": false,
+     "positionClass": "toast-top-full-width",
+     "preventDuplicates": false,
+     "onclick": null,
+     "showDuration": "300",
+     "hideDuration": "1000",
+     "timeOut": "5000",
+     "extendedTimeOut": "1000",
+     "showEasing": "swing",
+     "hideEasing": "linear",
+     "showMethod": "fadeIn",
+     "hideMethod": "fadeOut"
+     }
+   $('form').submit(function() {
+       validateForm();
+   });
+
+   function validateForm(){
+     var name = $('#id_data').val();
+     var re = /^[a-zA-Z]*[0-9a-zA-Z]*$/;
+     if (name == ''){
+       toastr["error"]("Por favor ingresa un nombre al proyecto", "Error en Nombre del Proyecto");
+       event.preventDefault();
+       return false;
+     }
+
+     if(name.match(re))
+     {
+       toastr["info"]("La reación del proyecto ha sido exitosa", "Proyecto exitoso");
+       return false;
+     }
+     else{
+       toastr["error"]("El nombre del proyecto solo puede empezar con una letra y continuar con caracteres alfanumericos", "Error en Nombre del Proyecto");
+       event.preventDefault();
+       return false;
+     }
+   }
+ });
+ </script>
+
+  {% endblock %}
+
+  {% block boton %}
+  <button type="submit" form="data" value="Submit" class="btn" name="guardar">Guardar</button>
+  <a href="{% url 'showData3' database_name %}" > <button class="btn"> Cancelar </button> </a>
+  {% endblock %}

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block css%}
+    {% load staticfiles %}
+    <link rel="StyleSheet" media="all" type="text/css" href="{% static 'css/styleDate.css' %}" />
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+{% endblock %}
+
+{% block title %}
+             <h1>Proyecto: {{database_name}}</h1>
+{% endblock %}
+
+
+{% block content%}
+
+  {% if atributos %}
+  <table id="Tabla_Atributos">
+    <tr>
+        <th>Nombre del atributo</th>
+        <th>Tipo de dato</th>
+        <th>Acción</th>
+    </tr>
+    {% for atributo in atributos%}
+    <tr id={{atributo.0}}>
+      {% for tipo in atributo %}
+        <td >
+
+
+          {% if "float" in tipo %}
+            Numérico
+
+          {% else %}
+          {% if "varchar" in tipo %}
+            Categórico
+
+          {% else %}
+          {{tipo}}
+
+          {% endif %}
+
+          {% endif %}
+
+
+
+
+        </td>
+
+        {% endfor %}
+        <td>
+          <a href="{% url 'modifyAtribute' database_name atributo.0 %}">
+            <img height="15px" src="{% static "icons/modify.svg" %}">
+          </a>
+          <a href="{% url 'deleteAtribute' database_name atributo.0 %}" id="delete">
+            <img height="15px" src="{% static "icons/delete.svg" %}">
+          </a>
+        </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <a href="{% url 'showAtributes3' database_name %}" > <button class="btn"> + Atributo </button> </a>
+
+
+<script type="text/javascript">
+    $("#delete").click(function(){
+      if(confirm("¿Está seguro de eliminar el atributo? Los datos asociados se perderán")){
+        return true;
+    }
+    else{
+      event.preventDefault();
+      return false;
+    }
+      });
+</script>
+
+  {% else %}
+       <a href="{% url 'showAtributes3' database_name %}" > <button class="btn"> + Atributo </button> </a>
+
+       <script type="text/javascript">
+
+       $(document).ready(function() {
+         toastr.options = {
+           "closeButton": false,
+           "debug": false,
+           "newestOnTop": false,
+           "progressBar": false,
+           "positionClass": "toast-top-full-width",
+           "preventDuplicates": false,
+           "onclick": null,
+           "showDuration": "300",
+           "hideDuration": "1000",
+           "timeOut": "5000",
+           "extendedTimeOut": "1000",
+           "showEasing": "swing",
+           "hideEasing": "linear",
+           "showMethod": "fadeIn",
+           "hideMethod": "fadeOut"
+           }
+           toastr["info"]("No existen elementos por el momento", "Error al consultar atributos");
+       });
+       </script>
+
+  {% endif %}
+
+
+{% if exception %}
+
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+  toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-full-width",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+    }
+    toastr["info"]("El nombre del atributo ya existe", "Atributo repetido");
+});
+</script>
+  {% endif %}
+
+{% endblock %}
+
+{% block boton %}
+
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block css%}
+    {% load staticfiles %}
+    <link rel="StyleSheet" media="all" type="text/css" href="{% static 'css/styleIndex2.css' %}" />
+{% endblock %}
+
+
+{% block title %}
+             <h1>Gestión de proyectos</h1>
+{% endblock %}
+
+
+{% block content%}
+
+<table id = "Projects">
+  <tr>
+      <th>Nombre del proyecto</th>
+      <th>Acción</th>
+    </tr>
+    {% if arrayBases %}
+      {% for base in arrayBases %}
+      <tr>
+        <td id="{{ base.0 }}"> {{ base.0 }} </td>
+        <td>
+          <a href="{% url 'deleteProject' base.0 %}">
+            <img height="15px" src="{% static "icons/delete.svg" %}">
+          </a>
+        </td>
+
+      </tr>
+      {% endfor %}
+{% endif %}
+
+</table>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+  toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-full-width",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+    }
+
+  $.when('#delete').then(function() {
+        toastr.error("Elimine los atributos del proyecto antes de poder eliminarlo", "Error: Eliminar Proyecto");
+  });
+
+  });
+</script>
+
+{% endblock %}
+
+{% block boton %}
+                <a href="{% url 'createProject' %}" class="btn">+ Proyecto</a>
+{% endblock %}

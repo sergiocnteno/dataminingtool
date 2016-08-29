@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block css%}
+    {% load staticfiles %}
+    <link rel="StyleSheet" media="all" type="text/css" href="{% static 'css/styleDate.css' %}" />
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+{% endblock %}
+
+{% block title %}
+             <h1>Gestión de gráfica</h1>
+{% endblock %}
+
+{% block content%}
+
+{% if arrayBases %}
+<form action="{% url 'chart2D' database_name %}" method="POST"  id="data" class="task-form"> {% csrf_token %}
+    <select name="DataBase" id="DataBase">
+      <option selected="">
+        Selecciona un proyecto
+      </option>
+      {% for base in arrayBases %}
+      <option value="{{ base }}" id="Databases">{{base}}</option>
+      {% endfor %}
+    </select>
+</form>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+  toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-full-width",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+    }
+    $(function(){
+        $("form").submit(function(){
+            var HoursEntry = $("#DataBase option:selected").val();
+            if(HoursEntry == "Selecciona un proyecto")
+            {
+                toastr["info"]("Por favor selecciona un proyecto", "Error en la seleccion del Proyecto");
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+});
+
+</script>
+
+{%  else %}
+
+<script type="text/javascript">
+$(document).ready(function() {
+  toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-full-width",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+    }
+    toastr["info"]("No existen elementos por el momento", "Error al consultar proyecto");
+});
+</script>
+
+{% endif %}
+{% endblock %}
+
+{% block boton %}
+{% if arrayBases %}
+<button type="submit" form="data" value="Submit" class="btn" name="showData">Visualizar informacion</button>
+{% endif %}
+{% endblock %}

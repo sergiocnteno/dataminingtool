@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block css%}
+    {% load staticfiles %}
+    <link rel="StyleSheet" media="all" type="text/css" href="{% static 'css/styleDate.css' %}" />
+  <!--  <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script> -->
+{% endblock %}
+
+{% block title %}
+             <h1>Gestión de información: {{database_name}}</h1>
+{% endblock %}
+
+{% block content%}
+
+
+{% if atributos %}
+  <table id="Tabla_data">
+        <tr>
+          {% for atributo in atributos %}
+            <th>{{ atributo.0 }}</th>
+          {% endfor %}
+            <th>Acción</th>
+        </tr>
+        {% for data in datos %}
+        <tr>
+          {% for da in data %}
+            <td id="{{ data.0 }}">{{ da }}</td>
+          {% endfor %}
+
+          <td>
+            <a href="{% url 'modifyData' database_name data.0 %}">
+              <img height="15px" src="{% static "icons/modify.svg" %}">
+            </a>
+            <a href="{% url 'deleteData' database_name data.0 %}">
+              <img height="15px" src="{% static "icons/delete.svg" %}">
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+<a href="{% url 'createData' database_name %}" > <button class="btn"> + Informacion </button> </a>
+
+{% else %}
+<script type="text/javascript">
+
+$(document).ready(function() {
+  toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-full-width",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+    }
+    toastr["info"]("No existen elementos por el momento", "Error al consultar atributos");
+});
+</script>
+
+
+  {% endif %}
+  {% endblock %}
+
+  {% block boton %}
+  {% endblock %}

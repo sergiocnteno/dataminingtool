@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block css%}
+    {% load staticfiles %}
+    <link rel="StyleSheet" media="all" type="text/css" href="{% static 'css/styleDate.css' %}" />
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+{% endblock %}
+
+{% block title %}
+             <h1>{{database_name}}</h1>
+{% endblock %}
+
+{% block content%}
+
+
+{% if atributoName %}
+<form action="{% url 'modifyAtribute2' database_name atributoName.0 %}" method="POST"  id="atribute" class="task-form"> {% csrf_token %}
+  <table id="Tabla_Atributos">
+    <tr>
+        <th>Nombre del atributo</th>
+    </tr>
+<tr>
+    <td id="nombre_Atribute">
+         <input type="text" value={{atributoName.0}} name="nombreAtribute" />
+    </td>
+</tr>
+</table>
+</form>
+
+{% else %}
+<form action="{% url 'createAtribute' database_name %}" method="POST"  id="atribute" class="task-form"> {% csrf_token %}
+
+  <table id="Tabla_Atributos">
+    <tr>
+        <th>Nombre del atributo</th>
+        <th>Tipo de dato</th>
+    </tr>
+    <tr>
+        <td id="nombre_Atribute">
+            {{ form.nombreAtribute}}
+        </td>
+        <td id="tipo_Atributo">
+            {{ form.tipoAtributo }}
+        </td>
+    </tr>
+  </table>
+</form>
+
+{% endif %}
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+  toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-full-width",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+    }
+  $('form').submit(function() {
+      validateForm();
+  });
+
+  function validateForm(){
+    var name = $('#id_nombreAtribute').val();
+    var re = /^[a-zA-Z]+[0-9a-zA-Z]*$/;
+    if (name == ''){
+      toastr["error"]("Por favor ingresa un nombre al atributo", "Campos faltantes");
+      event.preventDefault();
+      return false;
+    }
+
+    if(name.match(re))
+    {
+      toastr["info"]("La reación del proyecto ha sido exitosa", "Proyecto exitoso");
+      return false;
+    }
+    else{
+      toastr["error"]("El nombre del proyecto solo puede empezar con una letra y continuar con caracteres alfanumericos", "Formato del campo no valido");
+      event.preventDefault();
+      return false;
+    }
+  }
+});
+</script>
+
+{% if exception %}
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+  toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-full-width",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+    }
+  $('form').submit(function() {
+    toastr["error"]("Por favor ingresa un nombre al atributo", "Atributo duplicado");
+    event.preventDefault();
+    return false;
+  });
+
+});
+</script>
+
+
+
+{% endif %}
+
+{% endblock %}
+
+{% block boton %}
+    <button type="submit" form="atribute" value="Submit" class="btn" name="guardar" id="go">Guardar</button>
+    <a href="{% url 'showAtributes4' database_name %}" > <button class="btn"> Cancelar </button> </a>
+
+{% endblock %}

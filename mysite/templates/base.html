@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<HTML>
+    <HEAD>
+        <meta charset="UTF-8">
+        <TITLE>GEMSTONE - Herramienta de minería de datos para la gestión de información </TITLE>
+        {% block css%} {% endblock %}
+
+        {% load staticfiles %}
+        <!-- <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script> -->
+        <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+        <link href="{% static 'css/toastr.css' %}" rel="stylesheet"/>
+        <script src="{% static 'js/toastr.js' %}"></script>
+
+    </HEAD>
+    <BODY>
+        <nav>
+
+            <div id='logo'> {% load staticfiles %} <a href='#' id="logo"> <img height="50px" src="{% static "icons/logo.svg" %}"/> </a> </div>
+            <div id='cssmenu'>
+                <ul>
+                    <a href="{% url 'index' %}"><li><span>Mis proyectos</span></li></a>
+                    <a href="{% url 'showAtributes' %}"><li><span>Atributos</span></li></a>
+                    <a href="{% url 'showData' %}"><li><span>Información</span></li></a>
+                </ul>
+            </div>
+
+        </nav>
+
+
+
+        <div id="Notifications">
+        </div>
+
+        <div id="container">
+          <h1>{% block title %}{% endblock %}</h1>
+
+            <div id="projects">
+                {% block content %}{% endblock %}
+
+            </div>
+            <br><br>
+
+            {% block boton %}{% endblock %}
+            <br>
+            <br>
+        </div>
+
+        <div id="information">
+            <div id="poli">
+                {% load staticfiles %} <img height="200px" src="{% static "icons/poli.png" %}"/>
+            </div>
+
+            <div id="info">
+            <p>- Trabajo Terminal 2015-B060 - <br>
+                Alumnos: <br>
+                - Centeno Marmolejo Sergio Jesus <br>
+                - Martínez Corella Mitzi Jovelyn <br>
+                - Trujano Reyes Daniel <br> <br>
+
+                Directores: <br>
+                - M. en C. José David Ortega Pacheco <br>
+                - M. en C. Idalia Maldonado Castillo
+
+                </p>
+            </div>
+
+            <div id="escom">
+                {% load staticfiles %} <img height="150px" src="{% static "icons/escom.png" %}"/>
+            </div>
+        </div>
+
+
+    </BODY>
+</HTML>

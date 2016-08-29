@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load nvd3_tags %}
+{% block css %}
+    {# Jquery CDN : Needed when using jquery_on_ready=True #}
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styleDate.css' %}" />
+    {% include_chart_jscss %}
+    {% load_chart charttype chartdata chartcontainer extra %}
+{% endblock %}
+
+{% block title %}
+             <h1>Proyecto: </h1>
+{% endblock %}
+
+{% block content %}
+
+<form action="{% url 'chart2D' database_name %}" method="POST"  id="data" class="task-form"> {% csrf_token %}
+    <select name="Atributos" id="Atributos" onchange='this.form.submit()'>
+      <option selected="">
+        Selecciona un proyecto
+      </option>
+      {% for atributo in atributos %}
+      <option value="{{ atributo }}" id="atributos">{{atributo}}</option>
+      {% endfor %}
+    </select>
+</form>
+
+    {% include_container chartcontainer 400 700 %}
+{% endblock %}
+
+{% block boton %}
+    
+{% endblock %}

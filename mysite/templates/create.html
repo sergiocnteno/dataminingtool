@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block css%}
+    {% load staticfiles %}
+    <link rel="StyleSheet" media="all" type="text/css" href="{% static 'css/styleIndex2.css' %}" />
+
+{% endblock %}
+
+{% block title %}
+             <h1>Crear proyecto</h1>
+{% endblock %}
+
+{% block content%}
+
+{% if exception %}
+            <form action="{% url 'createBD' %}" method="POST"  id="Proyecto" > {% csrf_token %}
+              {{ form.as_p }}
+            </form>
+
+            <script type="text/javascript">
+
+            $(document).ready(function() {
+              toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-full-width",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+              }
+              toastr["error"]("El nombre del proyecto ya existe, por favor ingresa uno diferente", "Nombre del campo duplicado");
+                $('form').submit(function() {
+                    validateForm();
+                });
+
+                function validateForm(){
+                  var name = $('#id_nombreProyecto').val();
+                  var re = /^[a-zA-Z]+[0-9a-zA-Z]*$/;
+                  if (name == ''){
+                    toastr["error"]("Por favor ingresa un nombre al proyecto", "Campos faltantes");
+                    event.preventDefault();
+                    return false;
+                  }
+
+                  if(name.match(re))
+                  {
+                    toastr["info"]("La reación del proyecto ha sido exitosa", "Proyecto exitoso");
+                    return false;
+                  }
+                  else{
+                    toastr["error"]("El nombre del proyecto solo puede empezar con una letra y continuar con caracteres alfanumericos", "Formato del campo no valido");
+                    event.preventDefault();
+                    return false;
+                  }
+                }
+
+            });
+            </script>
+
+{% else %}
+
+<form action="{% url 'createBD' %}" method="POST"  id="Proyecto" > {% csrf_token %}
+  {{ form.as_p }}
+</form>
+
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+  toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-full-width",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+    }
+    $('form').submit(function() {
+        validateForm();
+    });
+
+    function validateForm(){
+      var name = $('#id_nombreProyecto').val();
+      var re = /^[a-zA-Z]+[0-9a-zA-Z]*$/;
+      if (name == ''){
+        toastr["error"]("Por favor ingresa un nombre al proyecto", "Campos faltantes");
+        event.preventDefault();
+        return false;
+      }
+
+      if(name.match(re))
+      {
+        toastr["info"]("La reación del proyecto ha sido exitosa", "Proyecto exitoso");
+        return false;
+      }
+      else{
+        toastr["error"]("El nombre del proyecto solo puede empezar con una letra y continuar con caracteres alfanumericos", "Formato del campo no valido");
+        event.preventDefault();
+        return false;
+      }
+    }
+
+});
+</script>
+
+
+
+{% endif %}
+{% endblock %}
+
+{% block boton %}
+            <div id="crear">
+                <button type="submit" form="Proyecto" value="Submit" class="btn" name="option1">Guardar</button>
+                <a href="{% url 'index' %}" > <button class="btn"> Cancelar </button> </a>
+            </div>
+{% endblock %}
